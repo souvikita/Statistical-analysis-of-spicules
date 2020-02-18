@@ -23,7 +23,10 @@ for clust_index in range(len(cluster_interest_blu)):
     master_aux_cube[np.where(cluster_mask == cluster_interest_blu[clust_index])] = 1. #This selects only the clusters of interest and creates a 3D cube with only clusters of interest
 
 label_unmorphed = label(master_aux_cube,return_num=True, connectivity=2) #Labelling the 3D cube in 3D
-
+labels_of_interest=[]
+for region in regionprops(label_unmorphed[0]):
+	lab = region.label
+	labels_of_interest.append(lab) 
 #------- Creating a 3D cube where we label each 2D image per time step and then store it as a  3D cube with serial order labels
 label_2d_cube=[]
 count =0
@@ -32,6 +35,7 @@ new_count = np.zeros((425)) # used to store those label numbers which are treeat
 print("entering the 2D labelling loop")
 for time in range(425): 
 	reference_mask= closing(master_aux_cube[:,:,time],selem=np.ones((3,3),np.uint8)) # doing a moprh closing on the BW mask
+	#reference_mask = master_aux_cube[:,:,time]
 	label_2d = label(reference_mask,connectivity=2,return_num=True)
 	label_numbers = label_2d[1]
 	if time ==0:
@@ -77,20 +81,24 @@ def compute_stats(label_number_3d):
     number obtained from labelled_unmorphed[1]
     """
     label_number_3d = int(label_number_3d)
-
     index = np.where(label_unmorphed[0]==label_number_3d)
     xx = np.unique(label_2d_proper_dim[index])
-    max_length = np.max(length_2d[np.isin(label_2d,xx)])
-    lab2d_max = xx[np.argmax(length_2d[np.isin(label_2d,xx)])]
-    yy = np.where(label_2d==lab2d_max)
-    max_area = area_2d[yy]
-    max_eccen =eccen_2d[yy]
-    return max_length, max_area, max_eccen
+    if xx.size == 0 or np.isin(xx,new_count).all() == True: #This condition is important because the morph_closing operation in line 34 can also remove some features thereby causing an empty 
+                                         ##array in the 3D labelled_unmorphed[0] cube. Hence checking if they are a part 
+        pass
+    else:
+        max_length = np.max(length_2d[np.isin(label_2d,xx)])
+        lab2d_max = xx[np.argmax(length_2d[np.isin(label_2d,xx)])]
+        yy = np.where(label_2d==lab2d_max)
+        max_area = area_2d[yy]
+        max_eccen =eccen_2d[yy]
+        return max_length, max_area, max_eccen
 
 print("****Going Parallel********")
-labels_of_interest = list(range(1,label_unmorphed[1]))
+#labels_of_interest = list(range(1,32842)) #label number 31336 has raised this ValueError: zero-size array to reduction operation maximum. 
+#labels_of_interest = list(range(31300,32842))
 #embed()
-pool=Pool()
+pool=Pool(120)
 #with Pool as pool:
 result = pool.map(compute_stats, labels_of_interest)
 data = np.array(result)
