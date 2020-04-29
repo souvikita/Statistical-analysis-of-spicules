@@ -56,13 +56,14 @@ label_blue_fast = [k[1] for k in ww_list]
 lifetime_blue_fast = np.array(lifetime_blue_fast)
 label_blue_fast = np.array(label_blue_fast)
 w1 = np.where(lifetime_blue_fast>=140.) # Forcing pixels with values >99% of the distribution of lifetime to be =0
-lifetime_blue_fast[w1[0]]=0.
+#lifetime_blue_fast[w1[0]]=0.
 life_median_blue_fast = np.zeros((size[0],size[1]))
 for row in range(size[0]):
 	for col in range(size[1]):
 		if label_3d_fast[row,col,:].any()!=0:
 			u = np.unique(label_3d_fast[row,col,:])
-			life_median_blue_fast[row,col] = np.median(lifetime_blue_fast[u[np.where(u!=0)]-1])
+			u_imp = np.where(np.isin(u,label_blue_fast[w1[0]]) == False)
+			life_median_blue_fast[row,col] = np.median(lifetime_blue_fast[u[u_imp][np.where(u[u_imp]!=0)[0]]-1])
 		else:
 			life_median_blue_fast[row,col] = 0.
 
@@ -83,13 +84,14 @@ label_blue_inter = [k[1] for k in ww_list]
 lifetime_blue_inter = np.array(lifetime_blue_inter)
 label_blue_inter = np.array(label_blue_inter)
 w2 = np.where(lifetime_blue_inter>=140) # Forcing pixels with values >99% of the distribution of lifetime to be =0
-lifetime_blue_inter[w2[0]]=0.
+#lifetime_blue_inter[w2[0]]=0.
 life_median_blue_inter = np.zeros((size[0],size[1]))
 for row in range(size[0]):
     for col in range(size[1]):
         if label_3d_inter[row,col,:].any()!=0:
         	u = np.unique(label_3d_inter[row,col,:])
-        	life_median_blue_inter[row,col] = np.median(lifetime_blue_inter[u[np.where(u!=0)]-1])
+        	u_imp = np.where(np.isin(u,label_blue_inter[w2[0]]) == False)
+        	life_median_blue_inter[row,col] = np.median(lifetime_blue_inter[u[u_imp][np.where(u[u_imp]!=0)[0]]-1])
         else:
             life_median_blue_inter[row,col] = 0.
 
@@ -108,13 +110,14 @@ label_blue_slow = [k[1] for k in ww_list]
 lifetime_blue_slow = np.array(lifetime_blue_slow)
 label_blue_slow = np.array(label_blue_slow)
 w3 = np.where(lifetime_blue_slow>=140.)
-lifetime_blue_slow[w3[0]]=0.
+#lifetime_blue_slow[w3[0]]=0.
 life_median_blue_slow = np.zeros((size[0],size[1]))
 for row in range(size[0]):
     for col in range(size[1]):
         if label_3d_slow[row,col,:].any()!=0:
             u = np.unique(label_3d_slow[row,col,:])
-            life_median_blue_slow[row,col] = np.median(lifetime_blue_slow[u[np.where(u!=0)]-1])
+            u_imp = np.where(np.isin(u,label_blue_slow[w3[0]]) == False)
+            life_median_blue_slow[row,col] = np.median(lifetime_blue_slow[u[u_imp][np.where(u[u_imp]!=0)[0]]-1])
         else:
             life_median_blue_slow[row,col] = 0.
 
@@ -135,14 +138,15 @@ lifetime_red_fast = [k[0] for k in ww_list]
 label_red_fast = [k[1] for k in ww_list]
 lifetime_red_fast = np.array(lifetime_red_fast)
 label_red_fast = np.array(label_red_fast)
-w4 = np.where(lifetime_red_fast>=150.)
-lifetime_red_fast[w4[0]]=0.
+w4 = np.where(lifetime_red_fast>=140.)
+#lifetime_red_fast[w4[0]]=0.
 life_median_red_fast = np.zeros((size[0],size[1]))
 for row in range(size[0]):
     for col in range(size[1]):
         if label_3d_red_fast1[row,col,:].any()!=0:
             u = np.unique(label_3d_red_fast1[row,col,:])
-            life_median_red_fast[row,col] = np.median(lifetime_red_fast[u[np.where(u!=0)]-1])
+            u_imp = np.where(np.isin(u,label_red_fast[w4[0]]) == False)
+            life_median_red_fast[row,col] = np.median(lifetime_red_fast[u[u_imp][np.where(u[u_imp]!=0)[0]]-1])
         else:
             life_median_red_fast[row,col] = 0.
 
@@ -161,14 +165,15 @@ lifetime_red_inter = [k[0] for k in ww_list]
 label_red_inter = [k[1] for k in ww_list]
 lifetime_red_inter = np.array(lifetime_red_inter)
 label_red_inter = np.array(label_red_inter)
-w5 = np.where(lifetime_red_inter>=150.)
-lifetime_red_inter[w5[0]]=0.
+w5 = np.where(lifetime_red_inter>=140.)
+#lifetime_red_inter[w5[0]]=0.
 life_median_red_inter = np.zeros((size[0],size[1]))
 for row in range(size[0]):
     for col in range(size[1]):
         if label_3d_red_inter1[row,col,:].any()!=0:
             u = np.unique(label_3d_red_inter1[row,col,:])
-            life_median_red_inter[row,col] = np.median(lifetime_red_inter[u[np.where(u!=0)]-1])
+            u_imp = np.where(np.isin(u,label_red_inter[w5[0]]) == False)
+            life_median_red_inter[row,col] = np.median(lifetime_red_inter[u[u_imp][np.where(u[u_imp]!=0)[0]]-1])
         else:
             life_median_red_inter[row,col] = 0.
 
@@ -186,14 +191,15 @@ lifetime_red_slow = [k[0] for k in ww_list]
 label_red_slow = [k[1] for k in ww_list]
 lifetime_red_slow = np.array(lifetime_red_slow)
 label_red_slow = np.array(label_red_slow)
-w6 = np.where(lifetime_red_slow>=150.)
-lifetime_red_slow[w6[0]]=0.
+w6 = np.where(lifetime_red_slow>=140.)
+#lifetime_red_slow[w6[0]]=0.
 life_median_red_slow = np.zeros((size[0],size[1]))
 for row in range(size[0]):
     for col in range(size[1]):
         if label_3d_red_slow1[row,col,:].any()!=0:
             u = np.unique(label_3d_red_slow1[row,col,:])
-            life_median_red_slow[row,col] = np.median(lifetime_red_slow[u[np.where(u!=0)]-1])
+            u_imp = np.where(np.isin(u,label_red_slow[w6[0]]) == False)
+            life_median_red_slow[row,col] = np.median(lifetime_red_slow[u[u_imp][np.where(u[u_imp]!=0)[0]]-1])
         else:
             life_median_red_slow[row,col] = 0.
 
@@ -281,4 +287,4 @@ axs[5].set_xlabel('X (Mm)')
 axs[5].text(3.5,55,'(f)',color='white',fontsize=17)
 #axs[5].text(36,4,r'N$_{tot}$ = '+format(label_red_slow1[1]),color='white',fontsize=13)
 #plt.subplot_adjust()
-plt.savefig('/mn/stornext/u3/souvikb/paper4_images/2d_events_spicules_lifetime_less_240_v2.png')
+plt.savefig('/mn/stornext/u3/souvikb/paper4_images/2d_events_spicules_lifetime_less_140_v3.png')
