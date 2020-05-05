@@ -45,5 +45,5 @@ result = pool.map(compute_lifetime_parallel, labels_of_interest)
 data = np.array(result)
 pool.close()
 pool.join()
-np.savez(dpath_cluster_fits+'lifetime_red_inter_uniq', data)
+np.savez(dpath_cluster_fits+'lifetime_red_slow_uniq', data)
 
