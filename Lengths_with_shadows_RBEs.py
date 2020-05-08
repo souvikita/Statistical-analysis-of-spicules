@@ -92,11 +92,16 @@ def compute_length_stats(label_number_3d):
     xx = np.unique(label_2d_proper_dim[index[0],index[1],index[2]])
     if xx.size != 0:
         index1 = np.where(np.isin(xx,new_count)== False)
-        max_length = np.max(length_2d[np.isin(label_2d,xx[index1])])
-        lab2d_max = xx[np.argmax(length_2d[np.isin(label_2d,xx[index1])])]
-        yy = np.where(label_2d==lab2d_max)
-        max_area = area_2d[yy]
-        max_eccen = eccen_2d[yy]
+        if len(index1[0])!=0: # this will prevent an empty list/tuple from entering the stats
+            max_length = np.max(length_2d[np.isin(label_2d,xx[index1])])
+            lab2d_max = xx[np.argmax(length_2d[np.isin(label_2d,xx[index1])])]
+            yy = np.where(label_2d==lab2d_max)
+            max_area = area_2d[yy]
+            max_eccen = eccen_2d[yy]
+        else:
+            max_length =np.nan
+            max_area = np.nan
+            max_eccen = np.nan
     else:
         max_length =np.nan
         max_area = np.nan
