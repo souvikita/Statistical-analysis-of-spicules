@@ -12,7 +12,7 @@ import sys
 from helita.io import lp
 import pickle
 dpath = '/mn/stornext/d11/lapalma/reduc/2017/2017-05-25/CHROMIS/crispex/09:12:00/'
-
+# Reading the data
 hdrCa_im = lp.getheader(dpath+'crispex_3950_2017-05-25T09:12:00_scans=0-424_time-corrected_rotated2iris.fcube')
 hdrCa_sp = lp.getheader(dpath+'crispex_3950_2017-05-25T09:12:00_scans=0-424_time-corrected_rotated2iris_sp.fcube')
 hdrH_im =lp.getheader(dpath+'crispex_6563_08:05:00_aligned_3950_2017-05-25T09:12:00_scans=0-424_rotated2iris.icube')
@@ -29,7 +29,7 @@ cubeH = lp.getdata(dpath+'crispex_6563_08:05:00_aligned_3950_2017-05-25T09:12:00
 cubeCa = np.reshape(cubeCa,[dimCa_im[0],dimCa_im[1],dimCa_sp[1],dimCa_sp[0]])
 cubeH = np.reshape(cubeH,[dimH_im[0],dimH_im[1],dimH_sp[1],dimH_sp[0]])
 
-scan = ((154,155,164,165,167,168,194,195,196,197))
+scan = ((154,155,164,165,167,168,194,195,196,197)) #--For training we just chose 10 scans spread over the FOV where we can see spicules clearly
 m1a = np.mean(cubeCa[400:699,600:899,scan,41])
 m2a = np.mean(cubeH[400:699,600:899,scan,31])
 
@@ -45,16 +45,16 @@ m2b = np.median(cubeH[:,:,:,[0,30]])
 
 cubeCa = cubeCa[:,:,:,:]/meanCa[:,:,:,None]*m1b
 cubeH = cubeH[:,:,:,:]/meanH[:,:,:,None]*m2b
-
+###----Between lines 33 and 47, it involves the normalization of the spectral profiles. 
 szz=cubeCa.shape
 print(cubeH.shape)
 
-cube_comb=np.zeros([szz[0],szz[1],szz[2],72])
+cube_comb=np.zeros([szz[0],szz[1],szz[2],72]) # Combining the spectral cubes
 cube_comb[:,:,:,:41]=cubeCa[:,:,:,:41]
 cube_comb[:,:,:,41:]=cubeH[:,:,:,:31]
 
 sz = np.shape(cube_comb)
-x = np.reshape(cube_comb,(sz[0]*sz[1]*sz[2],sz[3]))
+x = np.reshape(cube_comb,(sz[0]*sz[1]*sz[2],sz[3])) # basically of the shape (n_samples, n_params)
 
 print('Now starting k means with 50 clusters')
 
