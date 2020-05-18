@@ -1,0 +1,1 @@
+This is the final version of the codes of the lifetime of each of the components of Blue and Red labels (clusters). It is calculated with respect to a 3D labelled cube obtained after combining all the red and blue clusters. 
