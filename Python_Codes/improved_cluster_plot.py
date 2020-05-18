@@ -8,14 +8,16 @@ from sklearn.feature_extraction import image
 from sklearn.cluster import spectral_clustering
 from sklearn.decomposition import PCA
 from astropy.io import fits
-import sys
 from helita.io import lp
 import pickle
 from scipy.io.idl import readsav
+import h5py
 import matplotlib
 
 dpath_kmean_bose = '/mn/stornext/d9/souvikb/K_means_results/'
-data = pickle.load(open(dpath_kmean_bose+'kmeans_training.pickle','rb')) #(50,72)
+#data = pickle.load(open(dpath_kmean_bose+'kmeans_training.pickle','rb')) #(50,72)
+cluster_centers_new = h5py.File(dpath_kmean_bose+'reformed_cc.hdf5','r')
+data = np.array(cluster_centers_new['cc_new']) # ---- This is the new reformed dataset according to the paper----. 
 dpath = '/mn/stornext/d11/lapalma/reduc/2017/2017-05-25/CHROMIS/crispex/09:12:00/'
 
 wave_Ca =readsav(dpath+'spectfile.3950.idlsave')
@@ -31,8 +33,10 @@ in_text = 10
 
 matplotlib.rc('xtick', labelsize=8)     
 matplotlib.rc('ytick', labelsize=8)
-grps = [12,48,49,25,11,5,
-        18,46,26,36,8,16]
+grps = [0,1,2,3,4,5,
+        6,7,8,9,10,11]
+#--old nomenclature-- follow Context_plot.ipynb
+
 clrs = ['blue','blue','blue','blue','blue','blue',
        'red','red','red','red','red','red']
 clr_dic = dict(zip(grps, clrs))
@@ -47,8 +51,8 @@ for k in range(50):
     ax[k].axvline(x=line_core,color='black',linewidth = 1,linestyle='dashed')
     ax[k].text(.85, .065, str(k), transform=ax[k].transAxes, size=in_text,color='Green',fontweight='bold')
 
-fig.text(0.5, 0.97, 'Ca II K  clusters', ha='center', va='center', rotation='horizontal',size=12,fontweight='bold')
+fig.text(0.5, 0.97, r'Ca II k clusters', ha='center', va='center', rotation='horizontal',size=12,fontweight='bold')
 fig.text(0.5, 0.01, 'Wavelength [$\AA$]', ha='center', va='center', rotation='horizontal',size=12,fontweight='bold')
 fig.text(0.01, 0.5, 'Normalized intensity', ha='center', va='center', rotation='vertical',size=12,fontweight='bold')
-plt.savefig('/mn/stornext/u3/souvikb/paper4_images/Cluster_Cak.pdf')
+plt.savefig('/mn/stornext/d9/souvikb/paper4_images/Cak_clusters_v2.pdf')
 plt.show()
